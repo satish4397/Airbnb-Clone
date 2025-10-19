@@ -1,0 +1,56 @@
+<%- include('../partials/head') %>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <%- include('../partials/nav') %>
+
+  <main class="container mx-auto p-6 mt-12 max-w-6xl">
+    <section class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <header class="bg-gradient-to-r from-red-400 to-red-600 text-white p-6">
+        <h2 class="text-4xl font-bold text-center">Details of <%= home.houseName %></h2>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 p-8">
+        <!-- Image -->
+        <div class="rounded-xl overflow-hidden shadow-md">
+          <img src="<%= home.photo %>" alt="<%= home.name %>" class="w-full h-96 object-cover transition-transform duration-300 hover:scale-105">
+        </div>
+
+        <!-- Details -->
+        <div class="space-y-6 text-base leading-relaxed">
+          <!-- Description -->
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">📝 Description</h3>
+            <p class="text-gray-600"><%= home.description %></p>
+          </div>
+
+          <!-- Location -->
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">📍 Location</h3>
+            <p class="text-gray-600"><%= home.location %></p>
+          </div>
+
+          <!-- Price -->
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">💰 Price</h3>
+            <p class="text-green-600 text-2xl font-extrabold">$<%= home.price %> <span class="text-sm font-normal text-gray-500">/ night</span></p>
+          </div>
+
+          <!-- Rating -->
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">⭐ Rating</h3>
+            <div class="flex items-center">
+              <span class="text-yellow-400 text-2xl">★</span>
+              <span class="ml-2 text-lg font-medium text-gray-700"><%= home.rating %> / 5</span>
+            </div>
+          </div>
+
+          <!-- Favourite Button / Component -->
+          <div class="pt-4">
+            <%- include('../partials/favourite') %>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
