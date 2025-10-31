@@ -2,23 +2,17 @@
   "name": "airbnb",
   "version": "1.0.0",
   "main": "app.js",
+  "description": "Airbnb-style web app using Express, MongoDB, EJS, and Tailwind CSS",
+  "author": "",
+  "license": "ISC",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tailwind:watch": "tailwindcss -i ./views/input.css -o ./public/output.css --watch",
     "build:css": "tailwindcss -i ./views/input.css -o ./public/output.css --minify",
-    "dev": "nodemon app.js & npm run tailwind:watch",
+    "dev": "concurrently \"nodemon app.js\" \"npm run tailwind:watch\"",
     "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@types/node": "^24.1.0",
-    "nodemon": "^3.1.10"
-  },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.11",
     "autoprefixer": "^10.4.21",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
@@ -30,10 +24,13 @@
     "mongodb": "^6.18.0",
     "mongoose": "^8.16.4",
     "multer": "^2.0.2",
-    "mvc": "^1.0.0",
     "mysql2": "^3.14.2",
-    "node": "^20.19.4",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^3.4.14"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "concurrently": "^9.0.0",
+    "nodemon": "^3.1.10"
   }
 }
