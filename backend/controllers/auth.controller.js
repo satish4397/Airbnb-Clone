@@ -12,13 +12,14 @@ export const sighUp=async (req,res) => {
         let hashPassword = await bcrypt.hash(password,10)
         let user = await User.create({name , email , password:hashPassword})
         let token = await genToken(user._id)
-        res.cookie("token",token,{
-            httpOnly:true,
-            secure:true,
-            sameSite: " ",
+        res.cookie("token", token, {
+            httpOnly: true,
+            // set secure flag only when running in production
+            secure: process.env.NODE_ENV === "production",
+            // when frontend and backend are on different origins in production,
+            // cookies must be sent with SameSite='none' and secure=true
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
-
-
         })
         return res.status(201).json(user)
 
@@ -39,13 +40,11 @@ export const login = async (req,res) => {
             return res.status(400).json({message:"incorrect Password"})
         }
         let token = await genToken(user._id)
-        res.cookie("token",token,{
-            httpOnly:true,
-            secure:true,
-            sameSite: " ",
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
-
-
         })
         return res.status(200).json(user)
         

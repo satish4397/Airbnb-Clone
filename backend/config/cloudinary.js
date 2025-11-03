@@ -8,18 +8,27 @@ const uploadOnCloudinary = async (filepath) => {
         api_secret: process.env.CLOUDINARY_API_SECRET
     });
     try {
-        if(!filepath){
-            return null}
-        const uploadResult = await cloudinary.uploader
-        .upload(filepath)
-        fs.unlinkSync(filepath)
+        if (!filepath) {
+            return null
+        }
+        const uploadResult = await cloudinary.uploader.upload(filepath)
+        // remove temp file if it exists
+        try {
+            if (filepath && fs.existsSync(filepath)) fs.unlinkSync(filepath)
+        } catch (unlinkErr) {
+            console.error('Failed to remove temp file:', unlinkErr)
+        }
         return uploadResult.secure_url
 
-
-        
     } catch (error) {
-        fs.unlinkSync(filepath)
-        console.log(error)
+        // attempt to remove temp file if present, but guard against errors
+        try {
+            if (filepath && fs.existsSync(filepath)) fs.unlinkSync(filepath)
+        } catch (unlinkErr) {
+            console.error('Failed to remove temp file after upload error:', unlinkErr)
+        }
+        console.error('Cloudinary upload error:', error)
+        return null
     }
 }
 

@@ -14,8 +14,10 @@ let app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin:"https://airbnb-clone-using-mern.onrender.com",
-    credentials:true
+    origin: process.env.NODE_ENV === 'production'
+        ? process.env.FRONTEND_URL
+        : "http://localhost:5173",
+    credentials: true
 }))
 
 app.use("/api/auth", authRouter )
@@ -23,8 +25,14 @@ app.use("/api/user", userRouter )
 app.use("/api/listing",listingRouter )
 app.use("/api/booking",bookingRouter )
 
+// health check for Render / uptime monitoring
+app.get('/health', (req, res) => res.status(200).json({status: 'ok'}))
 
-app.listen(port,()=>{
-    connectDb()
-    console.log("server started")
+// connect to DB first, then start the server
+connectDb().then(() => {
+    app.listen(port, () => {
+        console.log(`Server started on port ${port}`)
+    })
+}).catch((err) => {
+    console.error('Failed to start server:', err)
 })

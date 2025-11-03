@@ -8,9 +8,15 @@ export const addListing = async (req,res) => {
     try {
         let host = req.userId;
         let {title,description,rent,city,landMark,category} = req.body
-        let image1 = await uploadOnCloudinary(req.files.image1[0].path)
-        let image2 = await uploadOnCloudinary(req.files.image2[0].path)
-        let image3 = await uploadOnCloudinary(req.files.image3[0].path)
+        // upload images to cloudinary (uploadOnCloudinary returns secure_url or null)
+        const image1 = req.files?.image1 ? await uploadOnCloudinary(req.files.image1[0].path) : null
+        const image2 = req.files?.image2 ? await uploadOnCloudinary(req.files.image2[0].path) : null
+        const image3 = req.files?.image3 ? await uploadOnCloudinary(req.files.image3[0].path) : null
+
+        // if any required image failed to upload, abort to avoid creating partial listings
+        if (!image1 || !image2 || !image3) {
+            return res.status(500).json({ message: 'Image upload failed. Please try again.' })
+        }
 
         let listing = await Listing.create({
             title,
@@ -67,27 +73,35 @@ export const updateListing = async (req,res) => {
         let image3;
         let {id} = req.params;
         let {title,description,rent,city,landMark,category} = req.body
-        if(req.files.image1){
-        image1 = await uploadOnCloudinary(req.files.image1[0].path)}
-        if(req.files.image2)
-        {image2 = await uploadOnCloudinary(req.files.image2[0].path)}
-        if(req.files.image3){
-        image3 = await uploadOnCloudinary(req.files.image3[0].path)}
+        // process uploaded images if present
+        if (req.files?.image1) {
+            image1 = await uploadOnCloudinary(req.files.image1[0].path)
+            if (!image1) return res.status(500).json({ message: 'Image1 upload failed' })
+        }
+        if (req.files?.image2) {
+            image2 = await uploadOnCloudinary(req.files.image2[0].path)
+            if (!image2) return res.status(500).json({ message: 'Image2 upload failed' })
+        }
+        if (req.files?.image3) {
+            image3 = await uploadOnCloudinary(req.files.image3[0].path)
+            if (!image3) return res.status(500).json({ message: 'Image3 upload failed' })
+        }
 
-        let listing = await Listing.findByIdAndUpdate(id,{
-            title,
-            description,
-            rent,
-            city,
-            landMark,
-            category,
-            image1,
-            image2,
-            image3,
-            
-        },{new:true})
-        
-        return res.status(201).json(listing)
+        // build update object only with provided fields to avoid overwriting existing images with undefined
+        const updateFields = {}
+        if (title) updateFields.title = title
+        if (description) updateFields.description = description
+        if (rent) updateFields.rent = rent
+        if (city) updateFields.city = city
+        if (landMark) updateFields.landMark = landMark
+        if (category) updateFields.category = category
+        if (image1) updateFields.image1 = image1
+        if (image2) updateFields.image2 = image2
+        if (image3) updateFields.image3 = image3
+
+        let listing = await Listing.findByIdAndUpdate(id, updateFields, { new: true })
+
+        return res.status(200).json(listing)
        
 
     } catch (error) {

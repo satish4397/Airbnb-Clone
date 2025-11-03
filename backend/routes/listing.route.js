@@ -13,7 +13,8 @@ listingRouter.post("/add",isAuth,upload.fields([
 ]),addListing)
 
 listingRouter.get("/get",getListing)
-listingRouter.get("/findlistingbyid/:id",isAuth,findListing)
+// route name kept to match frontend usage (some frontend files call findlistingByid)
+listingRouter.get("/findlistingByid/:id", isAuth, findListing)
 listingRouter.delete("/delete/:id",isAuth,deleteListing)
 listingRouter.post("/ratings/:id",isAuth,ratingListing)
 listingRouter.get("/search",search)
