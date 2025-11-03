@@ -16,7 +16,7 @@ app.use(cookieParser())
 app.use(cors({
     origin: process.env.NODE_ENV === 'production'
         ? process.env.FRONTEND_URL
-        : "http://localhost:5173",
+        : "https://airbnb-clone-using-mern-frontend.onrender.com",
     credentials: true
 }))
 
