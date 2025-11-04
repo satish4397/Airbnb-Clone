@@ -8,15 +8,13 @@ import cors from "cors"
 import userRouter from "./routes/user.route.js"
 import listingRouter from "./routes/listing.route.js"
 import bookingRouter from "./routes/booking.route.js"
-let port = process.env.PORT || 6000
+let port = process.env.PORT || 8000
 
 let app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production'
-        ? process.env.FRONTEND_URL
-        : "https://airbnb-clone-using-mern-frontend.onrender.com",
+    origin:"https://airbnb-clone-using-mern-frontend.onrender.com",
     credentials: true
 }))
 
