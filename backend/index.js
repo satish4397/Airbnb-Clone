@@ -23,7 +23,7 @@ app.use(cookieParser())
 
 // CORS configuration - using secure settings from security.js
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "https://airbnb-clone-using-mern-frontend.onrender.com",
+    origin: "https://frontend-3pld.onrender.com",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
